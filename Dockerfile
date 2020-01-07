@@ -10,7 +10,7 @@
 #we therefore add gcc
 FROM node:lts-slim
 
-MAINTAINER trion development GmbH "info@trion.de"
+MAINTAINER PesokLP13 "pesoklp13@gmail.com"
 
 ARG USER_HOME_DIR="/tmp"
 ARG APP_DIR="/app"
@@ -43,7 +43,8 @@ RUN apt-get update && apt-get install -qqy --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG NG_CLI_VERSION=8.3.21
-LABEL angular-cli=$NG_CLI_VERSION node=$NODE_VERSION
+ARG NX_CLI_VERSION=8.5.2
+LABEL angular-cli=$NG_CLI_VERSION node=$NODE_VERSION nx=$NX_CLI_VERSION
 
 # npm 5 uses different userid when installing packages, as workaround su to node when installing
 # see https://github.com/npm/npm/issues/16766
@@ -54,6 +55,6 @@ RUN set -xe \
     && mkdir -p $APP_DIR \
     && chown $USER_ID $APP_DIR \
     && chown -R node /usr/local/lib /usr/local/include /usr/local/share /usr/local/bin \
-    && (cd "$USER_HOME_DIR"; su node -c "npm install -g @angular/cli@$NG_CLI_VERSION; npm cache clean --force")
+    && (cd "$USER_HOME_DIR"; su node -c "npm install -g @angular/cli@$NG_CLI_VERSION; npm install -g @nrwl/cli@$NX_CLI_VERSION; npm cache clean --force")
 
 USER $USER_ID
